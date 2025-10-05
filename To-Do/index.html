@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Todo App — Professional UI</title>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- GLOBAL TOP BAR -->
+  <div id="globalTopBar" class="global-topbar" role="region" aria-label="Top bar">
+    <div class="global-topbar-inner">
+      <div class="global-left">
+        <span class="global-msg"></span>
+      </div>
+      <div class="global-right"></div>
+    </div>
+  </div>
+
+  <div id="app" class="app-shell">
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="sidebar collapsed" aria-label="Primary navigation">
+      <div class="sidebar-top">
+        <button id="menuToggle" class="icon-btn" aria-label="Toggle menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="3" y1="6" x2="21" y2="6" stroke-linecap="round"/>
+            <line x1="3" y1="12" x2="21" y2="12" stroke-linecap="round"/>
+            <line x1="3" y1="18" x2="21" y2="18" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav" role="navigation">
+        <button class="nav-item active" id="nav-today" title="Today" aria-label="Today">
+          <img src="./Assets/Home.svg" width="20" height="20" class="nav-icon" alt="Today"/>
+          <span class="nav-text">Today</span>
+        </button>
+        <button class="nav-item" id="nav-calendar" title="Calendar" aria-label="Calendar">
+          <img src="./Assets/Calender.svg" width="20" height="20" class="nav-icon" alt="Calendar"/>
+          <span class="nav-text">Calendar</span>
+        </button>
+        <button class="nav-item" id="nav-completed" title="Completed" aria-label="Completed">
+          <img src="./Assets/CompleatedTask.svg" width="20" height="20" class="nav-icon" alt="Completed tasks"/>
+          <span class="nav-text">Completed</span>
+        </button>
+        <button class="nav-item" id="nav-add" title="Add task" aria-label="Add task">
+          <img src="./Assets/AddItem.svg" width="20" height="20" class="nav-icon" alt="Add Task"/>
+          <span class="nav-text">Add Task</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main id="mainContent" class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 id="pageTitle">Today</h1>
+          <div class="page-sub">April 12, 2025</div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="searchwrap">
+            <input type="search" placeholder="Search tasks..." id="searchTask" class="search"/>
+            <button class="icon-btn mini" aria-label="Search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="6"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section id="contentArea" class="content">
+        <!-- TODAY VIEW -->
+        <section id="todayView" class="view">
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Today's Tasks</h2>
+              <div class="panel-actions">
+                <button id="quickAddBtn" class="btn btn-outline">Quick Add</button>
+              </div>
+            </div>
+
+            <div id="todayEmpty" class="empty-state" style="display:none;">
+              <div class="empty-illustration" aria-hidden="true">
+                <svg width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 5v14M5 12h14" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <p class="empty-text">Nothing scheduled today — create your first task.</p>
+            </div>
+
+            <div id="todayTasks" class="task-list"></div>
+          </div>
+        </section>
+
+        <!-- CALENDAR VIEW -->
+        <section id="calendarView" class="view" style="display:none;">
+          <div class="calendar-layout">
+            <div class="calendar-panel panel">
+              <div class="calendar-header">
+                <button id="prevMonth" class="calendar-nav-btn" aria-label="Previous month">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"/>
+                  </svg>
+                </button>
+
+                <h3 id="currentMonth" class="calendar-month">April 2025</h3>
+
+                <button id="nextMonth" class="calendar-nav-btn" aria-label="Next month">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"/>
+                  </svg>
+                </button>
+              </div>
+              <div id="calendar" class="calendar-grid" role="grid" aria-label="Calendar"></div>
+            </div>
+
+            <aside id="selectedDateTasks" class="tasks-panel panel selected-date-tasks"></aside>
+          </div>
+        </section>
+
+        <!-- COMPLETED VIEW -->
+        <section id="completedView" class="view" style="display:none;">
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Completed Tasks</h2>
+              <div class="panel-actions">
+                <button id="clearCompleted" class="btn btn-danger">Clear All</button>
+              </div>
+            </div>
+            <div id="completedTasks" class="task-list"></div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <!-- ADD / EDIT MODAL -->
+  <div id="taskModal" class="modal" aria-hidden="true" style="display:none;">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <header class="modal-header">
+        <h3 id="modalTitle">Add Task</h3>
+        <button id="cancelBtn" class="icon-btn" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </header>
+
+      <div class="modal-body">
+        <label class="field">
+          <span class="field-label">Title</span>
+          <input id="taskTitle" class="input-field" placeholder="e.g., Finish project README"/>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Description</span>
+          <textarea id="taskDescription" class="input-field textarea-field" placeholder="Optional details"></textarea>
+        </label>
+
+        <div class="form-row">
+          <label class="field small">
+            <span class="field-label">Date</span>
+            <input id="taskDate" type="date" class="date-input"/>
+          </label>
+
+          <label class="field small">
+            <span class="field-label">Priority</span>
+            <select id="taskPriority" class="priority-select">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button id="saveTaskBtn" class="btn btn-primary">Add Task</button>
+          <button id="deleteTaskBtn" class="btn btn-delete" style="display:none;">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/initial.js"></script>
+  <script>
+    // Sidebar toggle for small screens
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+    });
+  </script>
+</body>
+</html>
